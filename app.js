@@ -1,6 +1,7 @@
 //NodeJS Core Modules
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
 const PORT = 3000;
 
@@ -42,7 +43,7 @@ const server = http.createServer((req, res) => {
                 <body>
                     <div id="container">
                         <div class="nav-logo">
-                            <img src="./src/images/logo.png" alt="Page Logo">
+                            <img src="/src/images/logo.png" alt="Page Logo"> 
                         </div>
                         <div class="page-name">${pageTitle}</div>
                         <div class="page-body">
@@ -90,11 +91,27 @@ const server = http.createServer((req, res) => {
                     'Content-Type' : 'text/plain'
                 });
                 res.end('Internal Server Error');
-                return;
+                return;                
             }
 
             res.writeHead(200, {
                 'Content-Type': 'text/css'
+            });
+            res.end(data);
+        });
+    } else if (req.method === 'GET' && req.url.startsWith('/src/images')) {
+        const imagePath = path.join(__dirname, req.url);
+        fs.readFile(imagePath, (err, data) => {
+            if (err) {
+                console.error(err);
+                res.writeHead(404, {
+                    'Content-Type' : 'text/plain'
+                });
+                res.end('File Not Found');
+                return;                
+            }
+            res.writeHead(200, {
+                'Content-Type': 'image/png'
             });
             res.end(data);
         });
