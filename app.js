@@ -50,29 +50,53 @@ const server = http.createServer((req, res) => {
                             <div class="employee-name">
                                 Employee Name: ${employeeName}
                             </div>
-                
-                            <div id="time-sheet">
-                                <div class="time-sheet-header row">
-                                    <p class="sheet-row">Date</p>
-                                    <p class="sheet-row">Time In (AM)</p>
-                                    <p class="sheet-row">Time Out (AM)</p>
-                                    <p class="sheet-row">Time In (PM)</p>
-                                    <p class="sheet-row">Time Out (PM)</p>
-                                    <p class="sheet-row">Total Hours</p>
-                                </div>
-                                <div class="time-sheet-body row">
-                                    <p class="sheet-row">${dateToday}</p>
-                                    <p class="sheet-row">8:00</p>
-                                    <p class="sheet-row">12:00</p>
-                                    <p class="sheet-row">1:00</p>
-                                    <p class="sheet-row">5:00</p>
-                                    <p class="sheet-row">8</p>
-                                </div>
-                                <div class="time-sheet-totals row">
-                                    <p class="sheet-row">Weekly Totals</p>
-                                    <p class="sheet-row">${weeklyTotal}</p>
-                                </div>
-                            </div>
+
+                            <table class="time-sheet">
+                                <thead>
+                                    <tr>
+                                        <th id="date-cell">Date</th>
+                                        <th>Time In (AM)</th>
+                                        <th>Time Out (AM)</th>
+                                        <th>Time In (PM)</th>
+                                        <th>Time Out (PM)</th>
+                                        <th>Total Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td data-label="Date Today">${dateToday}</td>
+                                        <td data-label="Time In - AM">8:00</td>
+                                        <td data-label="Time Out - AM">12:00</td>
+                                        <td data-label="Time In - PM">1:00</td>
+                                        <td data-label="Time Out - PM">5:00</td>
+                                        <td data-label="Total Hours">8</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Date Today">${dateToday}</td>
+                                        <td data-label="Time In - AM">8:00</td>
+                                        <td data-label="Time Out - AM">12:00</td>
+                                        <td data-label="Time In - PM">1:00</td>
+                                        <td data-label="Time Out - PM">5:00</td>
+                                        <td data-label="Total Hours">8</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Date Today">${dateToday}</td>
+                                        <td data-label="Time In - AM">8:00</td>
+                                        <td data-label="Time Out - AM">12:00</td>
+                                        <td data-label="Time In - PM">1:00</td>
+                                        <td data-label="Time Out - PM">5:00</td>
+                                        <td data-label="Total Hours">8</td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Date Today">${dateToday}</td>
+                                        <td data-label="Time In - AM">8:00</td>
+                                        <td data-label="Time Out - AM">12:00</td>
+                                        <td data-label="Time In - PM">1:00</td>
+                                        <td data-label="Time Out - PM">5:00</td>
+                                        <td data-label="Total Hours">8</td>
+                                    </tr>
+                                </tbody>
+                                </table>
                         </div>
                     </div>
                 </body>

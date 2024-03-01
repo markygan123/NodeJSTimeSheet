@@ -31,7 +31,7 @@ body {
 
 #container {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .page-body {
@@ -45,7 +45,7 @@ body {
 
 .nav-logo {
     width: 15%;
-    height: 175px;
+    height: 150px;
     margin: 0 auto;
 }
 
@@ -55,33 +55,30 @@ body {
     max-height: 100%;
 }
 
-#time-sheet {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
+table {
+    border-collapse: collapse;
+    width: 65%;
     margin: 0 auto;
 }
 
-.time-sheet-header {
-    font-weight: bold;
+th, td {
+    border: 1px solid black;
 }
 
-.time-sheet-body {
-    font-size: 1.3rem;
+thead th {
+    padding: 1em;
 }
 
-#time-sheet .row {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
+thead {
+    background-color: #333;
+    color: #fff;
 }
 
-.sheet-row {
-    flex: 1;
+#date-cell {
+    width: 25%;
 }
 
-.row {
-    margin: 15px 0;
-}
+
+
 
 
