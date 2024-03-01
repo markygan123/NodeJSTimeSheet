@@ -71,7 +71,10 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
-                                        <td data-label="Action">8</td>
+                                        <td data-label="Action" class="action-cell">
+                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
+                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -80,7 +83,10 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
-                                        <td data-label="Action">8</td>
+                                        <td data-label="Action" class="action-cell">
+                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
+                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -89,7 +95,10 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
-                                        <td data-label="Action">8</td>
+                                        <td data-label="Action" class="action-cell">
+                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
+                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -98,7 +107,22 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
-                                        <td data-label="Action">8</td>
+                                        <td data-label="Action" class="action-cell">
+                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
+                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td data-label="Date Today">${dateToday}</td>
+                                        <td data-label="Time In - AM">8:00</td>
+                                        <td data-label="Time Out - AM">12:00</td>
+                                        <td data-label="Time In - PM">1:00</td>
+                                        <td data-label="Time Out - PM">5:00</td>
+                                        <td data-label="Total Hours">8</td>
+                                        <td data-label="Action" class="action-cell">
+                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
+                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
+                                        </td>
                                     </tr>
                                 </tbody>
                                 </table>
@@ -139,8 +163,29 @@ const server = http.createServer((req, res) => {
                 res.end('File Not Found');
                 return;                
             }
+            const contentType = {
+                '.jpg': 'image/jpg',
+                '.jpeg': 'image/jpeg',
+                '.png': 'image/png'
+            }
             res.writeHead(200, {
-                'Content-Type': 'image/png'
+                'Content-Type': contentType
+            });
+            res.end(data);
+        });
+    } else if (req.method === 'GET' && req.url.startsWith('/src/logo')) {
+        const logoPath = path.join(__dirname, req.url);
+        fs.readFile(logoPath, (err, data) => {
+            if (err) {
+                console.error(err);
+                res.writeHead(404, {
+                    'Content-Type' : 'text/plain'
+                });
+                res.end('File Not Found');
+                return;                
+            }
+            res.writeHead(200, {
+                'Content-Type': 'image/svg+xml'
             });
             res.end(data);
         });

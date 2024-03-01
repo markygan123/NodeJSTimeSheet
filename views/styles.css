@@ -25,6 +25,7 @@ html {
 
 /* Custom CSS */
 
+/* General Styling */
 body {
     font-family: 'Tahoma', sans-serif;
 }
@@ -43,6 +44,7 @@ body {
     margin: 25px 0;
 }
 
+/* Nav Logo Styling */
 .nav-logo {
     width: 15%;
     height: 150px;
@@ -55,6 +57,7 @@ body {
     max-height: 100%;
 }
 
+/* Data Table Styling */
 table {
     border-collapse: collapse;
     width: 65%;
@@ -71,7 +74,7 @@ thead th {
 }
 
 td {
-    border-bottom: 1px solid rgb(88, 88, 88);
+    border-bottom: 1px solid rgb(157 157 157);
 }
 
 thead {
@@ -85,6 +88,11 @@ thead {
 
 tbody tr:nth-child(even) {
     background-color: #eee;
+}
+
+.svg-logo {
+    width: 25px;
+    height: 25px;
 }
 
 
