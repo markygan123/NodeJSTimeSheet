@@ -60,6 +60,7 @@ const server = http.createServer((req, res) => {
                                         <th>Time In (PM)</th>
                                         <th>Time Out (PM)</th>
                                         <th>Total Hours</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,6 +71,7 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
+                                        <td data-label="Action">8</td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -78,6 +80,7 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
+                                        <td data-label="Action">8</td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -86,6 +89,7 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
+                                        <td data-label="Action">8</td>
                                     </tr>
                                     <tr>
                                         <td data-label="Date Today">${dateToday}</td>
@@ -94,6 +98,7 @@ const server = http.createServer((req, res) => {
                                         <td data-label="Time In - PM">1:00</td>
                                         <td data-label="Time Out - PM">5:00</td>
                                         <td data-label="Total Hours">8</td>
+                                        <td data-label="Action">8</td>
                                     </tr>
                                 </tbody>
                                 </table>

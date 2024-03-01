@@ -59,14 +59,19 @@ table {
     border-collapse: collapse;
     width: 65%;
     margin: 0 auto;
+    border: 1px solid black;
 }
 
 th, td {
-    border: 1px solid black;
+    padding: 10px;
 }
 
 thead th {
     padding: 1em;
+}
+
+td {
+    border-bottom: 1px solid rgb(88, 88, 88);
 }
 
 thead {
@@ -76,6 +81,10 @@ thead {
 
 #date-cell {
     width: 25%;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #eee;
 }
 
 
