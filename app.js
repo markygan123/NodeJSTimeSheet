@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
     // Handle only GET requests for the specified route '/'
     if (req.method === 'GET' && req.url === '/') {
         // Read the HTML file asynchronously
-        fs.readFile('views/index.html', 'utf8', (err, data) => {
+        fs.readFile('public/index.html', 'utf8', (err, data) => {
             if (err) {
                 // Handle error
                 console.error(err);
@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
 
             //Dynamic data
             const pageTitle = 'Weekly Time Sheet';
-            const date = new Date();
+            let date = new Date();
             let weeklyTotal = 8;
             let day = date.getDate();
             let month = date.getMonth() + 1;
@@ -41,7 +41,7 @@ const server = http.createServer((req, res) => {
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <link rel="stylesheet" type="text/css" href="/views/styles.css" />
+                    <link rel="stylesheet" type="text/css" href="/public/styles.css" />
                     <title>SafeTrust</title>
                 </head>
                 <body>
@@ -91,58 +91,11 @@ const server = http.createServer((req, res) => {
                                             <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td data-label="Date Today">${dateToday}</td>
-                                        <td data-label="Time In - AM">8:00</td>
-                                        <td data-label="Time Out - AM">12:00</td>
-                                        <td data-label="Time In - PM">1:00</td>
-                                        <td data-label="Time Out - PM">5:00</td>
-                                        <td data-label="Total Hours">8</td>
-                                        <td data-label="Action" class="action-cell">
-                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
-                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Date Today">${dateToday}</td>
-                                        <td data-label="Time In - AM">8:00</td>
-                                        <td data-label="Time Out - AM">12:00</td>
-                                        <td data-label="Time In - PM">1:00</td>
-                                        <td data-label="Time Out - PM">5:00</td>
-                                        <td data-label="Total Hours">8</td>
-                                        <td data-label="Action" class="action-cell">
-                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
-                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Date Today">${dateToday}</td>
-                                        <td data-label="Time In - AM">8:00</td>
-                                        <td data-label="Time Out - AM">12:00</td>
-                                        <td data-label="Time In - PM">1:00</td>
-                                        <td data-label="Time Out - PM">5:00</td>
-                                        <td data-label="Total Hours">8</td>
-                                        <td data-label="Action" class="action-cell">
-                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
-                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Date Today">${dateToday}</td>
-                                        <td data-label="Time In - AM">8:00</td>
-                                        <td data-label="Time Out - AM">12:00</td>
-                                        <td data-label="Time In - PM">1:00</td>
-                                        <td data-label="Time Out - PM">5:00</td>
-                                        <td data-label="Total Hours">8</td>
-                                        <td data-label="Action" class="action-cell">
-                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
-                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
-                                        </td>
-                                    </tr>
                                 </tbody>
                                 </table>
                         </div>
                     </div>
+                    <script src="/public/js/script.js"></script>
                 </body>
                 </html>
             `;
@@ -151,11 +104,11 @@ const server = http.createServer((req, res) => {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(htmlContent);
         });
-    } else if (req.url === '/views/styles.css') {
-        fs.readFile('./views/styles.css', 'utf8', (err, data) => {
+    } else if (req.url === '/public/styles.css') {
+        fs.readFile('./public/styles.css', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
-                res.writeHead(500, {
+                res.writeHead(404, {
                     'Content-Type' : 'text/plain'
                 });
                 res.end('Internal Server Error');
@@ -201,6 +154,23 @@ const server = http.createServer((req, res) => {
             }
             res.writeHead(200, {
                 'Content-Type': 'image/svg+xml'
+            });
+            res.end(data);
+        });
+    } else if (req.method === 'GET' && req.url.startsWith('/public/js')) {
+        const scriptPath = path.join(__dirname, req.url);
+        fs.readFile(scriptPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+                res.writeHead(404, {
+                    'Content-Type' : 'text/plain'
+                });
+                res.end('Internal Server Error');
+                return;                
+            }
+
+            res.writeHead(200, {
+                'Content-Type': 'application/javascript'
             });
             res.end(data);
         });
