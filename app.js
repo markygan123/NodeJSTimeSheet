@@ -29,6 +29,10 @@ const server = http.createServer((req, res) => {
             let year = date.getFullYear();
             let dateToday = `${day}/${month}/${year}`;
             const employeeName = 'Norman Banzon';
+            const employeeID = '010';
+            const employeePosition = 'Senior Software Developer';
+            const employeeDept = 'IT/Software Development';
+
 
             // Replace the placeholder with actual data
             const htmlContent = `
@@ -47,8 +51,19 @@ const server = http.createServer((req, res) => {
                         </div>
                         <div class="page-name">${pageTitle}</div>
                         <div class="page-body">
-                            <div class="employee-name">
-                                Employee Name: ${employeeName}
+                            <div class="employee-info">
+                                <div class="empinfo-left>
+                                    <p class="detail"> Employee Name: ${employeeName} </p>
+                                    <p class="detail"> Employee ID: ${employeeID} </p>
+                                </div>
+                                <div class="empinfo-right">
+                                    <p class="detail"> Position: ${employeePosition} </p>
+                                    <p class="detail"> Department: ${employeeDept} </p>
+                                </div>
+                            </div>
+                            <div class="dates-section">
+                                <input type="week" name="week" id="week">
+                                <button>Add New Week</button>
                             </div>
 
                             <table class="time-sheet">
