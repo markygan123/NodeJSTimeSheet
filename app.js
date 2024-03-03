@@ -95,6 +95,20 @@ const server = http.createServer((req, res) => {
                                 </table>
                         </div>
                     </div>
+
+                    <section class="modal-window hidden">
+                        <h3>Confirm Clock Punch</h3>
+                        <div class="clock"></div>
+                        <button id="submit-punch">Submit Clock Punch</button>
+                    </section>
+
+                    <div class="overlay hidden"></div>
+
+
+
+
+
+
                     <script src="/public/js/script.js"></script>
                 </body>
                 </html>

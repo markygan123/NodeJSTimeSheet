@@ -3,6 +3,9 @@ const APP = (function() {
     
     const logBtn = document.querySelector('button');
     const tableBody = document.querySelector('tbody');
+    const modal = document.querySelector('.modal-window');
+    const overlay = document.querySelector('.overlay');
+
     let weekCount = 1;
 
     function init() {
@@ -10,7 +13,7 @@ const APP = (function() {
         buttonLabel();
     }
     
-    function addListeners() {
+    const addListeners = function () {
         // logBtn.addEventListener('click', function() {
         //     let date = new Date();
         //     let weeklyTotal = 8;
@@ -38,6 +41,8 @@ const APP = (function() {
         //     weekCount++;
         // });
 
+        logBtn.addEventListener('click', openModal);
+
     }
     
     function buttonLabel() {
@@ -51,6 +56,11 @@ const APP = (function() {
         
         let btnLabel = ((timeInAM === undefined || timeInAM === "") || (timeInPM === undefined || timeInPM === "")) ?  logBtn.innerHTML = "Clock In" : logBtn.innerHTML = "Clock Out";
 
+    }
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        overlay.classList.remove('hidden');
     }
     
 })();
