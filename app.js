@@ -79,13 +79,13 @@ const server = http.createServer((req, res) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                <tr id='week-1'>
                                         <td data-label="Date Today">${dateToday}</td>
-                                        <td data-label="Time In - AM">8:00</td>
-                                        <td data-label="Time Out - AM">12:00</td>
-                                        <td data-label="Time In - PM">1:00</td>
-                                        <td data-label="Time Out - PM">5:00</td>
-                                        <td data-label="Total Hours">8</td>
+                                        <td class="time-in-am"></td>
+                                        <td class="time-out-am">12:00</td>
+                                        <td class="time-in-pm">1:00</td>
+                                        <td class="time-out-pm">5:00</td>
+                                        <td class="total-hrs">8</td>
                                         <td data-label="Action" class="action-cell">
                                             <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
                                             <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
