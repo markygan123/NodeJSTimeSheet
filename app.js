@@ -98,9 +98,11 @@ const server = http.createServer((req, res) => {
                     
                     <div class="overlay hidden">
                         <section class="modal-window">
+
                             <h3>Confirm Clock Punch</h3>
                             <div id="clock"></div>
-                            <button id="submit-punch">Clock In</button>
+                            <button class="submit-punch">Clock In</button>
+                            <button class="cancel-punch">Cancel</button>
                         </section>
                     </div>
 

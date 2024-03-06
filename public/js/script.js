@@ -1,10 +1,14 @@
 const APP = (function() {
     document.addEventListener('DOMContentLoaded', init);
     
-    const logBtn = document.querySelector('button');
-    const tableBody = document.querySelector('tbody');
+    
+    const tableBody = document.querySelector('tbody');    
     const modal = document.querySelector('.modal-window');
     const overlay = document.querySelector('.overlay');
+    const logBtn = document.querySelector('button');
+
+    
+    let digitalClockEl = document.querySelector('#clock');
 
     let weekCount = 1;
 
@@ -42,8 +46,13 @@ const APP = (function() {
         //     tableBody.appendChild(tableRow);
         //     weekCount++;
         // });
+        
+        const cancelPunchBtn = document.querySelector('.cancel-punch');
+        const submitPunchBtn = document.querySelector('.submit-punch');
 
         logBtn.addEventListener('click', openModal);
+        cancelPunchBtn.addEventListener('click', closeModal);
+        submitPunchBtn.addEventListener('click', submitPunch);
 
     }
     
@@ -51,8 +60,6 @@ const APP = (function() {
         let timeInAM = document.querySelector('td.time-in-am').innerHTML;
         let timeOutAM = document.querySelector('td.time-out-am').innerHTML;
         let timeInPM = document.querySelector('td.time-in-pm').innerHTML;
-        let timeOutPM = document.querySelector('td.time-out-pm').innerHTML;
-        let totalHrs = document.querySelector('td.total-hrs').innerHTML;
 
         console.log(timeOutAM);
         
@@ -65,14 +72,23 @@ const APP = (function() {
         overlay.classList.remove('hidden');
     }
 
-    function digitalClock() {
-        let digitalClock = document.querySelector('#clock');
+    function closeModal() {
+        modal.classList.add('hidden');
+        overlay.classList.add('hidden');
+    }
 
-        digitalClock.innerHTML = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "2-digit", minute: "2-digit" });
+    function digitalClock() {
+        digitalClockEl.innerHTML = new Date().toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
     }
 
     function runClock() {
         setInterval(digitalClock, 1000);
+    }
+
+    const submitPunch = () => {
+        let timeInAMCell = document.querySelector('td.time-in-am');
+        timeInAMCell.innerHTML = digitalClockEl.innerHTML;
+        closeModal();
     }
     
 })();
