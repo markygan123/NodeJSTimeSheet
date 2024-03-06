@@ -11,6 +11,8 @@ const APP = (function() {
     function init() {
         addListeners();
         buttonLabel();
+        digitalClock();
+        runClock();
     }
     
     const addListeners = function () {
@@ -61,6 +63,16 @@ const APP = (function() {
     function openModal() {
         modal.classList.remove('hidden');
         overlay.classList.remove('hidden');
+    }
+
+    function digitalClock() {
+        let digitalClock = document.querySelector('#clock');
+
+        digitalClock.innerHTML = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "2-digit", minute: "2-digit" });
+    }
+
+    function runClock() {
+        setInterval(digitalClock, 1000);
     }
     
 })();

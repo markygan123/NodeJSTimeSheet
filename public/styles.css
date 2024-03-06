@@ -126,7 +126,7 @@ tbody tr:nth-child(even) {
     height: 25px;
 }
 
-/* clock punch styles */
+/* clock punch modal styles */
 .modal-window {
     max-width: 300px;
     margin: 0 auto;
@@ -154,6 +154,13 @@ tbody tr:nth-child(even) {
 
 .hidden {
     display: none;
+}
+
+/* clock styles */
+#clock {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 3rem;
 }
 
 
