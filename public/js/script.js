@@ -19,7 +19,7 @@ const APP = (function() {
         runClock();
     }
     
-    const addListeners = function () {
+    const addListeners = () => {
         // logBtn.addEventListener('click', function() {
         //     let date = new Date();
         //     let weeklyTotal = 8;
@@ -56,7 +56,7 @@ const APP = (function() {
 
     }
     
-    function buttonLabel() {
+    const buttonLabel = () => {
         let timeInAM = document.querySelector('td.time-in-am').innerHTML;
         let timeOutAM = document.querySelector('td.time-out-am').innerHTML;
         let timeInPM = document.querySelector('td.time-in-pm').innerHTML;
@@ -67,21 +67,21 @@ const APP = (function() {
 
     }
 
-    function openModal() {
+    const openModal = () =>  {
         modal.classList.remove('hidden');
         overlay.classList.remove('hidden');
     }
 
-    function closeModal() {
+    const closeModal = () =>  {
         modal.classList.add('hidden');
         overlay.classList.add('hidden');
     }
 
-    function digitalClock() {
+    const digitalClock = () =>  {
         digitalClockEl.innerHTML = new Date().toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
     }
 
-    function runClock() {
+    const runClock = () => {
         setInterval(digitalClock, 1000);
     }
 
