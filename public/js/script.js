@@ -1,14 +1,17 @@
 const APP = (function() {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener("DOMContentLoaded", init);
     
     
-    const tableBody = document.querySelector('tbody');    
-    const modal = document.querySelector('.modal-window');
-    const overlay = document.querySelector('.overlay');
-    const logBtn = document.querySelector('button');
+    const tableBody = document.querySelector("tbody");    
+    const modal = document.querySelector(".modal-window");
+    const overlay = document.querySelector(".overlay");
+    const logBtn = document.querySelector(".clock-btn");
 
     
-    let digitalClockEl = document.querySelector('#clock');
+    let digitalClockEl = document.querySelector("#clock");
+    let clockPunchCount = 0;
+    let hourTotalCount = 0;
+
 
     let weekCount = 1;
 
@@ -20,14 +23,14 @@ const APP = (function() {
     }
     
     const addListeners = () => {
-        // logBtn.addEventListener('click', function() {
+        // logBtn.addEventListener("click", function() {
         //     let date = new Date();
         //     let weeklyTotal = 8;
         //     let day = date.getDate();
         //     let month = date.getMonth() + 1;
         //     let year = date.getFullYear();
         //     let dateToday = `${day}/${month}/${year}`;
-        //     let tableRow = document.createElement('tr');
+        //     let tableRow = document.createElement("tr");
         //     let newWeekRow = `
         //     <td data-label="Date Today">${dateToday}</td>
         //     <td data-label="Time In - AM">8:00</td>
@@ -42,43 +45,49 @@ const APP = (function() {
         //     `;
             
         //     tableRow.innerHTML = newWeekRow;
-        //     tableRow.setAttribute('id',`week-${weekCount+1}`);
+        //     tableRow.setAttribute("id",`week-${weekCount+1}`);
         //     tableBody.appendChild(tableRow);
         //     weekCount++;
         // });
         
-        const cancelPunchBtn = document.querySelector('.cancel-punch');
-        const submitPunchBtn = document.querySelector('.submit-punch');
+        const cancelPunchBtn = document.querySelector(".cancel-punch");
+        const submitPunchBtn = document.querySelector(".submit-punch");
 
-        logBtn.addEventListener('click', openModal);
-        cancelPunchBtn.addEventListener('click', closeModal);
-        submitPunchBtn.addEventListener('click', submitPunch);
+        logBtn.addEventListener("click", openModal);
+        cancelPunchBtn.addEventListener("click", closeModal);
+        submitPunchBtn.addEventListener("click", submitPunch);
 
     }
     
     const buttonLabel = () => {
-        let timeInAM = document.querySelector('td.time-in-am').innerHTML;
-        let timeOutAM = document.querySelector('td.time-out-am').innerHTML;
-        let timeInPM = document.querySelector('td.time-in-pm').innerHTML;
-
-        console.log(timeOutAM);
+        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
+        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
+        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
         
-        let btnLabel = ((timeInAM === undefined || timeInAM === "") || (timeInPM === undefined || timeInPM === "")) ?  logBtn.innerHTML = "Clock In" : logBtn.innerHTML = "Clock Out";
+        if (timeInAM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else if (timeOutAM === "") {
+            logBtn.innerHTML = "Clock Out";
+        } else if (timeInPM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else {
+            logBtn.innerHTML = "Clock Out";
+        }
 
     }
 
     const openModal = () =>  {
-        modal.classList.remove('hidden');
-        overlay.classList.remove('hidden');
+        modal.classList.remove("hidden");
+        overlay.classList.remove("hidden");
     }
 
     const closeModal = () =>  {
-        modal.classList.add('hidden');
-        overlay.classList.add('hidden');
+        modal.classList.add("hidden");
+        overlay.classList.add("hidden");
     }
 
     const digitalClock = () =>  {
-        digitalClockEl.innerHTML = new Date().toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
+        digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
     }
 
     const runClock = () => {
@@ -86,9 +95,37 @@ const APP = (function() {
     }
 
     const submitPunch = () => {
-        let timeInAMCell = document.querySelector('td.time-in-am');
-        timeInAMCell.innerHTML = digitalClockEl.innerHTML;
+        let timeInAMCell = document.querySelector("td.time-in-am");
+        let timeOutAMCell = document.querySelector("td.time-out-am");        
+        let timeInPMCell = document.querySelector("td.time-in-pm");
+        let timeOutPMCell = document.querySelector("td.time-out-pm");
+        let timeNow = digitalClockEl.innerHTML;
+
+        if (timeInAMCell.innerHTML  === "") {
+            timeInAMCell.innerHTML = timeNow;
+            timeInAMCell.classList.add("punched-in")
+            clockPunchCount++;
+        } else if (logBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
+            timeOutAMCell.innerHTML = timeNow;
+            timeOutAMCell.classList.add("punched-in");
+            clockPunchCount++;            
+        } else if (logBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
+            timeInPMCell.innerHTML = timeNow;
+            timeInPMCell.classList.add("punched-in");
+            clockPunchCount++;            
+        } else if (logBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
+            timeOutPMCell.innerHTML = timeNow;
+            timeOutPMCell.classList.add("punched-in");
+            clockPunchCount++;            
+        }
+        
+        if (clockPunchCount >= 4) {
+            logBtn.style.display = "none";
+        }
+
         closeModal();
+        //update button label every clock punch
+        buttonLabel();
     }
     
 })();
