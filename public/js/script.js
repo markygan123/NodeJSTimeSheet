@@ -12,30 +12,16 @@ const APP = (function() {
     let clockPunchCount = 0;
     let hourTotalCount = 0;
 
+
     let weekCount = 1;
 
     function init() {
-        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
-        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
-        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
-        
         addListeners();
-        digitalClock();
-        runClock();
-        
-        if (timeInAM === "") {
-            logBtn.innerHTML = "Clock In";
-        } else if (timeOutAM === "") {
-            logBtn.innerHTML = "Clock Out";
-        } else if (timeInPM === "") {
-            logBtn.innerHTML = "Clock In";
-        } else {
-            logBtn.innerHTML = "Clock Out";
-        }        
+        buttonLabel();
 
-        setInterval(digitalClock, 1000);
-
-        
+        setInterval(function () {
+            digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
+        }, 1000);
     }
     
     const addListeners = () => {
@@ -69,33 +55,35 @@ const APP = (function() {
         const cancelPunchBtn = document.querySelector(".cancel-punch");
         const submitPunchBtn = document.querySelector(".submit-punch");
 
-        logBtn.addEventListener("click", openModal);
+        logBtn.addEventListener("click", function openModal() {
+            modal.classList.remove("hidden");
+            overlay.classList.remove("hidden");
+        });
         cancelPunchBtn.addEventListener("click", closeModal);
         submitPunchBtn.addEventListener("click", submitPunch);
 
     }
     
     const buttonLabel = () => {
+        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
+        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
+        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
         
+        if (timeInAM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else if (timeOutAM === "") {
+            logBtn.innerHTML = "Clock Out";
+        } else if (timeInPM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else {
+            logBtn.innerHTML = "Clock Out";
+        }
 
-    }
-
-    const openModal = () =>  {
-        modal.classList.remove("hidden");
-        overlay.classList.remove("hidden");
     }
 
     const closeModal = () =>  {
         modal.classList.add("hidden");
         overlay.classList.add("hidden");
-    }
-
-    const digitalClock = () =>  {
-        digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
-
-    }
-
-    const runClock = () => {
     }
 
     const submitPunch = () => {
