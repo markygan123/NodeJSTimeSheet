@@ -75,7 +75,6 @@ const server = http.createServer((req, res) => {
                                         <th>Time In (PM)</th>
                                         <th>Time Out (PM)</th>
                                         <th>Total Hours</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,10 +85,6 @@ const server = http.createServer((req, res) => {
                                         <td class="time-in-pm"></td>
                                         <td class="time-out-pm"></td>
                                         <td class="total-hrs">0</td>
-                                        <td data-label="Action" class="action-cell">
-                                            <img src="/src/logo/new.svg" class="svg-logo" alt="Add">
-                                            <img src="/src/logo/edit.svg" class="svg-logo" alt="Edit">
-                                        </td>
                                     </tr>
                                 </tbody>
                                 </table>
