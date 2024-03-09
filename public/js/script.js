@@ -10,7 +10,8 @@ const APP = (function() {
     
     let digitalClockEl = document.querySelector("#clock");
     let clockPunchCount = 0;
-    let hourTotalCount = 0;
+    let timeInAM = 0;
+    let timeInPM = 0;
 
 
     let weekCount = 1;
@@ -93,9 +94,7 @@ const APP = (function() {
         let totalHrsCell = document.querySelector("td.total-hrs");
 
         let timeNow = digitalClockEl.innerHTML;
-        
-        let totalHrsAM = timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3);
-        let totalHrsPM = timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3);
+        let tempAMHrs;        
 
         if (timeInAMCell.innerHTML  === "") {
             timeInAMCell.innerHTML = timeNow;
@@ -103,9 +102,12 @@ const APP = (function() {
             clockPunchCount++;
         } else if (logBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
-            timeOutAMCell.classList.add("punched-in");            
-            let totalHrs = totalHrsAM;
-            totalHrsCell.innerHTML = totalHrs;
+            timeOutAMCell.classList.add("punched-in");
+            totalHrsAM = Number(timeOutAMCell.innerHTML.substring(0,2) + "." + timeOutAMCell.innerHTML.substring(3)) - 
+                         Number(timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3));
+            totalHrs = totalHrsAM;
+            tempAMHrs = totalHrsAM.toFixed(2);
+            totalHrsCell.innerHTML = tempAMHrs;
             clockPunchCount++;            
         } else if (logBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
             timeInPMCell.innerHTML = timeNow;
@@ -114,13 +116,15 @@ const APP = (function() {
         } else if (logBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
             timeOutPMCell.innerHTML = timeNow;
             timeOutPMCell.classList.add("punched-in");
-            totalHrs = totalHrsAM + totalHrsPM;
-            totalHrsCell.innerHTML = totalHrs;
+            totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
+                         Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));            
             clockPunchCount++;      
         }
-
+        
         if (clockPunchCount >= 4) {
             logBtn.style.display = "none";
+            totalHrs = (totalHrsAM + totalHrsPM).toFixed(2);
+            totalHrsCell.innerHTML = totalHrs;
         }
 
         closeModal();
