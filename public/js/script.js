@@ -78,7 +78,6 @@ const APP = (function() {
         } else {
             logBtn.innerHTML = "Clock Out";
         }
-
     }
 
     const closeModal = () =>  {
@@ -92,15 +91,21 @@ const APP = (function() {
         let timeInPMCell = document.querySelector("td.time-in-pm");
         let timeOutPMCell = document.querySelector("td.time-out-pm");
         let totalHrsCell = document.querySelector("td.total-hrs");
+
         let timeNow = digitalClockEl.innerHTML;
         
+        let totalHrsAM = timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3);
+        let totalHrsPM = timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3);
+
         if (timeInAMCell.innerHTML  === "") {
             timeInAMCell.innerHTML = timeNow;
-            timeInAMCell.classList.add("punched-in");
+            timeInAMCell.classList.add("punched-in");            
             clockPunchCount++;
         } else if (logBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
-            timeOutAMCell.classList.add("punched-in");
+            timeOutAMCell.classList.add("punched-in");            
+            let totalHrs = totalHrsAM;
+            totalHrsCell.innerHTML = totalHrs;
             clockPunchCount++;            
         } else if (logBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
             timeInPMCell.innerHTML = timeNow;
@@ -109,7 +114,9 @@ const APP = (function() {
         } else if (logBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
             timeOutPMCell.innerHTML = timeNow;
             timeOutPMCell.classList.add("punched-in");
-            clockPunchCount++;            
+            totalHrs = totalHrsAM + totalHrsPM;
+            totalHrsCell.innerHTML = totalHrs;
+            clockPunchCount++;      
         }
 
         if (clockPunchCount >= 4) {
