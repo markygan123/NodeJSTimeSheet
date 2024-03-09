@@ -12,14 +12,30 @@ const APP = (function() {
     let clockPunchCount = 0;
     let hourTotalCount = 0;
 
-
     let weekCount = 1;
 
     function init() {
+        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
+        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
+        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
+        
         addListeners();
-        buttonLabel();
         digitalClock();
         runClock();
+        
+        if (timeInAM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else if (timeOutAM === "") {
+            logBtn.innerHTML = "Clock Out";
+        } else if (timeInPM === "") {
+            logBtn.innerHTML = "Clock In";
+        } else {
+            logBtn.innerHTML = "Clock Out";
+        }        
+
+        setInterval(digitalClock, 1000);
+
+        
     }
     
     const addListeners = () => {
@@ -60,19 +76,7 @@ const APP = (function() {
     }
     
     const buttonLabel = () => {
-        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
-        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
-        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
         
-        if (timeInAM === "") {
-            logBtn.innerHTML = "Clock In";
-        } else if (timeOutAM === "") {
-            logBtn.innerHTML = "Clock Out";
-        } else if (timeInPM === "") {
-            logBtn.innerHTML = "Clock In";
-        } else {
-            logBtn.innerHTML = "Clock Out";
-        }
 
     }
 
@@ -88,10 +92,10 @@ const APP = (function() {
 
     const digitalClock = () =>  {
         digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
+
     }
 
     const runClock = () => {
-        setInterval(digitalClock, 1000);
     }
 
     const submitPunch = () => {
@@ -99,11 +103,12 @@ const APP = (function() {
         let timeOutAMCell = document.querySelector("td.time-out-am");        
         let timeInPMCell = document.querySelector("td.time-in-pm");
         let timeOutPMCell = document.querySelector("td.time-out-pm");
+        let totalHrsCell = document.querySelector("td.total-hrs");
         let timeNow = digitalClockEl.innerHTML;
-
+        
         if (timeInAMCell.innerHTML  === "") {
             timeInAMCell.innerHTML = timeNow;
-            timeInAMCell.classList.add("punched-in")
+            timeInAMCell.classList.add("punched-in");
             clockPunchCount++;
         } else if (logBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
@@ -118,7 +123,7 @@ const APP = (function() {
             timeOutPMCell.classList.add("punched-in");
             clockPunchCount++;            
         }
-        
+
         if (clockPunchCount >= 4) {
             logBtn.style.display = "none";
         }
