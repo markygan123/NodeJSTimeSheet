@@ -5,7 +5,8 @@ const APP = (function() {
     const tableBody = document.querySelector("tbody");    
     const modal = document.querySelector(".modal-window");
     const overlay = document.querySelector(".overlay");
-    const logBtn = document.querySelector(".clock-btn");
+    const clockPunchBtn = document.querySelector(".clock-punch-btn");
+    const clockPunchModalBtn = document.querySelector(".clock-punch-modal-btn");
 
     
     let digitalClockEl = document.querySelector("#clock");
@@ -26,7 +27,7 @@ const APP = (function() {
     }
     
     const addListeners = () => {
-        // logBtn.addEventListener("click", function() {
+        // clockPunchBtn.addEventListener("click", function() {
         //     let date = new Date();
         //     let weeklyTotal = 8;
         //     let day = date.getDate();
@@ -56,7 +57,7 @@ const APP = (function() {
         const cancelPunchBtn = document.querySelector(".cancel-punch");
         const submitPunchBtn = document.querySelector(".submit-punch");
 
-        logBtn.addEventListener("click", function openModal() {
+        clockPunchBtn.addEventListener("click", function openModal() {
             modal.classList.remove("hidden");
             overlay.classList.remove("hidden");
         });
@@ -71,13 +72,17 @@ const APP = (function() {
         let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
         
         if (timeInAM === "") {
-            logBtn.innerHTML = "Clock In";
+            clockPunchBtn.innerHTML = "Clock In";
+            clockPunchModalBtn.innerHTML = "Clock In";
         } else if (timeOutAM === "") {
-            logBtn.innerHTML = "Clock Out";
+            clockPunchBtn.innerHTML = "Clock Out";
+            clockPunchModalBtn.innerHTML = "Clock Out";
         } else if (timeInPM === "") {
-            logBtn.innerHTML = "Clock In";
+            clockPunchBtn.innerHTML = "Clock In";
+            clockPunchModalBtn.innerHTML = "Clock In";
         } else {
-            logBtn.innerHTML = "Clock Out";
+            clockPunchBtn.innerHTML = "Clock Out";
+            clockPunchModalBtn.innerHTML = "Clock Out";
         }
     }
 
@@ -100,7 +105,7 @@ const APP = (function() {
             timeInAMCell.innerHTML = timeNow;
             timeInAMCell.classList.add("punched-in");            
             clockPunchCount++;
-        } else if (logBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
+        } else if (clockPunchBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
             timeOutAMCell.classList.add("punched-in");
             totalHrsAM = Number(timeOutAMCell.innerHTML.substring(0,2) + "." + timeOutAMCell.innerHTML.substring(3)) - 
@@ -109,11 +114,11 @@ const APP = (function() {
             tempAMHrs = totalHrsAM.toFixed(2);
             totalHrsCell.innerHTML = tempAMHrs;
             clockPunchCount++;            
-        } else if (logBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
+        } else if (clockPunchBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
             timeInPMCell.innerHTML = timeNow;
             timeInPMCell.classList.add("punched-in");
             clockPunchCount++;            
-        } else if (logBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
+        } else if (clockPunchBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
             timeOutPMCell.innerHTML = timeNow;
             timeOutPMCell.classList.add("punched-in");
             totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
@@ -122,7 +127,7 @@ const APP = (function() {
         }
         
         if (clockPunchCount >= 4) {
-            logBtn.style.display = "none";
+            clockPunchBtn.style.display = "none";
             totalHrs = (totalHrsAM + totalHrsPM).toFixed(2);
             totalHrsCell.innerHTML = totalHrs;
         }

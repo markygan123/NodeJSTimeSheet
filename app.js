@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {
                             </div>
                             <div class="dates-section">
                                 <input type="week" name="week" id="week">
-                                <button class="clock-btn">Clock In</button>
+                                <button class="clock-punch-btn">Clock In</button>
                             </div>
 
                             <table class="time-sheet">
@@ -96,7 +96,7 @@ const server = http.createServer((req, res) => {
 
                             <h3>Confirm Clock Punch</h3>
                             <div id="clock"></div>
-                            <button class="clock-btn submit-punch">Clock In</button>
+                            <button class="clock-punch-modal-btn submit-punch"></button>
                             <button class="cancel-punch">Cancel</button>
                         </section>
                     </div>
