@@ -161,6 +161,7 @@ tbody tr:nth-child(even) {
     font-family: monospace;
     font-weight: bold;
     font-size: 3rem;
+    margin: 20px 0;
 }
 
 
