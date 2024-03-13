@@ -99,7 +99,8 @@ const APP = (function() {
 
         if (timeInAMCell.innerHTML  === "") {
             timeInAMCell.innerHTML = timeNow;
-            timeInAMCell.classList.add("punched-in");            
+            timeInAMCell.classList.add("punched-in");
+            localStorage.setItem("TimeInAM", timeNow);            
             clockPunchCount++;
         } else if (clockPunchBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
@@ -109,16 +110,19 @@ const APP = (function() {
             totalHrs = totalHrsAM;
             tempAMHrs = totalHrsAM.toFixed(2);
             totalHrsCell.innerHTML = tempAMHrs;
+            localStorage.setItem("TimeOutAM", tempAMHrs);
             clockPunchCount++;            
         } else if (clockPunchBtn.innerHTML === "Clock In" && timeOutAMCell.classList.contains("punched-in")) {
             timeInPMCell.innerHTML = timeNow;
             timeInPMCell.classList.add("punched-in");
+            localStorage.setItem("TimeInPM", timeNow);
             clockPunchCount++;            
         } else if (clockPunchBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
             timeOutPMCell.innerHTML = timeNow;
             timeOutPMCell.classList.add("punched-in");
             totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
-                         Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));            
+                         Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));
+            localStorage.setItem("TimeOutPM", timeNow);            
             clockPunchCount++;      
         }
         
