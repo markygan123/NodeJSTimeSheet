@@ -1,6 +1,5 @@
 const APP = (function() {
-    document.addEventListener("DOMContentLoaded", init);
-    
+    document.addEventListener("DOMContentLoaded", init);    
     
     const tableBody = document.querySelector("tbody");    
     const modal = document.querySelector(".modal-window");
@@ -13,9 +12,6 @@ const APP = (function() {
     let clockPunchCount = 0;
     let timeInAM = 0;
     let timeInPM = 0;
-
-
-    let weekCount = 1;
 
     function init() {
         addListeners();
