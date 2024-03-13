@@ -2,6 +2,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const queryString = require('querystring');
 
 const PORT = 3000;
 
@@ -185,6 +186,23 @@ const server = http.createServer((req, res) => {
             });
             res.end(data);
         });
+    } else if (req.method === 'POST', req.url === '/') { 
+        let body = '';
+
+        req.on('data', function (data) {
+            body += data.toString();
+        });
+
+        req.on('end', () => {  
+            try {
+                const postData = JSON.parse(body);
+                console.log('Latest Time Punch: ', postData);
+            }
+            catch (error) {
+                console.error('Error parsing JSON', error);
+            }
+        });
+
     } else {
         res.writeHead(404, { 'Content-Type' : 'text/plain' });
         res.end('Not Found');
