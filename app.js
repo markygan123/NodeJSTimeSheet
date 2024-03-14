@@ -6,6 +6,12 @@ const queryString = require('querystring');
 
 const PORT = 3000;
 
+let storedTimeInAM = "";
+let storedTimeOutAM = "";
+let storedTimeInPM = "";
+let storedTimeOutPM = "";
+let storedtotalHrs = "";
+
 const server = http.createServer((req, res) => {
     // Handle only GET requests for the specified route '/'
     if (req.method === 'GET' && req.url === '/') {
@@ -32,8 +38,8 @@ const server = http.createServer((req, res) => {
             const employeeName = 'Norman Banzon';
             const employeeID = '010';
             const employeePosition = 'Senior Software Developer';
-            const employeeDept = 'IT/Software Development';
-
+            const employeeDept = 'IT/Software Development';            
+            
 
             // Replace the placeholder with actual data
             const htmlContent = `
@@ -81,11 +87,11 @@ const server = http.createServer((req, res) => {
                                 <tbody>
                                 <tr id='week-1'>
                                         <td data-label="Date Today">${dateToday}</td>
-                                        <td class="time-in-am"></td>
-                                        <td class="time-out-am"></td>
-                                        <td class="time-in-pm"></td>
-                                        <td class="time-out-pm"></td>
-                                        <td class="total-hrs">0</td>
+                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
+                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
+                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
+                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
+                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
                                     </tr>
                                 </tbody>
                                 </table>
@@ -188,6 +194,7 @@ const server = http.createServer((req, res) => {
         });
     } else if (req.method === 'POST', req.url === '/') { 
         let body = '';
+        
 
         req.on('data', function (data) {
             body += data.toString();
@@ -195,13 +202,21 @@ const server = http.createServer((req, res) => {
 
         req.on('end', () => {  
             try {
-                const postData = JSON.parse(body);
-                console.log('Latest Time Punch: ', postData);
+                const postData = JSON.parse(body);                
+                storedTimeInAM = postData.TimeInAM;
+                storedTimeOutAM = postData.TimeOutAM;
+                storedTimeInPM = postData.TimeInPM;
+                storedTimeOutPM = postData.TimeOutPM;
+                storedtotalHrs = postData.TotalHrs;
+                storedPunchCount = postData.ClockPunchCount;
             }
             catch (error) {
                 console.error('Error parsing JSON', error);
             }
+
+            console.log(storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedPunchCount);
         });
+
 
     } else {
         res.writeHead(404, { 'Content-Type' : 'text/plain' });
