@@ -208,13 +208,13 @@ const server = http.createServer((req, res) => {
                 storedTimeInPM = postData.TimeInPM;
                 storedTimeOutPM = postData.TimeOutPM;
                 storedtotalHrs = postData.TotalHrs;
-                storedPunchCount = postData.ClockPunchCount;
+                storedDayStatus = postData.WorkDayStatus;
             }
             catch (error) {
                 console.error('Error parsing JSON', error);
             }
 
-            console.log(storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedPunchCount);
+            console.log(storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedDayStatus);
         });
 
 

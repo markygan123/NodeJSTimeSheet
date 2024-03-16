@@ -103,7 +103,6 @@ const APP = (function() {
             timeInAMCell.classList.add("punched-in");
             localStorage.setItem("TimeInAM", timeNow);            
             clockPunchCount++;
-            localStorage.setItem("ClockPunchCount", clockPunchCount);            
             storeTimePunch();
         } else if (clockPunchBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
@@ -116,30 +115,31 @@ const APP = (function() {
             clockPunchCount++;
             localStorage.setItem("TimeOutAM", timeNow);
             localStorage.setItem("TotalHrs", tempAMHrs);
-            localStorage.setItem("ClockPunchCount", clockPunchCount); 
             storeTimePunch();            
         } else if (clockPunchBtn.innerHTML === "Clock In" && !timeInPMCell.classList.contains("punched-in") && timeInPMCell.innerHTML === "") {
             timeInPMCell.innerHTML = timeNow;
             timeInPMCell.classList.add("punched-in");
             clockPunchCount++;
             localStorage.setItem("TimeInPM", timeNow);
-            localStorage.setItem("ClockPunchCount", clockPunchCount); 
             storeTimePunch();            
         } else if (clockPunchBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
+            let timeAm = localStorage.getItem("TotalHrs");
             timeOutPMCell.innerHTML = timeNow;
             timeOutPMCell.classList.add("punched-in");
             totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
                          Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));
             localStorage.setItem("TimeOutPM", timeNow);
             clockPunchCount++;
-            totalHrs = (totalHrsAM + totalHrsPM).toFixed(2);
+            totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(2);
             totalHrsCell.innerHTML = totalHrs;
             localStorage.setItem("TotalHrs", totalHrs); 
-            localStorage.setItem("ClockPunchCount", clockPunchCount);      
+            localStorage.setItem("WorkDayStatus", "done");      
             storeTimePunch();   
         }
         
-        if (clockPunchCount >= 4) {
+        let workDayStatus = localStorage.getItem("WorkDayStatus", "done");
+
+        if (workDayStatus != null) {
             clockPunchBtn.style.display = "none";    
             localStorage.clear();
         }
@@ -155,14 +155,14 @@ const APP = (function() {
         let timeInPm = localStorage.getItem("TimeInPM");
         let timeOutPm = localStorage.getItem("TimeOutPM");
         let totalHrs = localStorage.getItem("TotalHrs");
-        let punchCount = localStorage.getItem("ClockPunchCount");
+        let workDayStatus = localStorage.getItem("WorkDayStatus");
         
         timePunchJson["TimeInAM"] = timeInAm;
         timePunchJson["TimeOutAM"] = timeOutAm;
         timePunchJson["TimeInPM"] = timeInPm;
         timePunchJson["TimeOutPM"] = timeOutPm;
         timePunchJson["TotalHrs"] = totalHrs;
-        timePunchJson["ClockPunchCount"] = punchCount;
+        timePunchJson["WorkDayStatus"] = workDayStatus;
         
         console.log(timePunchJson);
         fetch("/", {
