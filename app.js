@@ -2,7 +2,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const queryString = require('querystring');
+const { initializeDb } = require('./dbSetup');
 
 const PORT = 3000;
 
@@ -223,6 +223,8 @@ const server = http.createServer((req, res) => {
         res.end('Not Found');
     }
 });
+
+initializeDb();
 
 // Start the server on port 3000 (or choose a different port if needed)
 server.listen(PORT, () => {
