@@ -34,7 +34,7 @@ const server = http.createServer((req, res) => {
             let day = date.getDate();
             let month = date.getMonth() + 1;
             let year = date.getFullYear();
-            let dateToday = `${day}/${month}/${year}`;
+            let dateToday = `${month}/${day}/${year}`;
             const employeeName = 'Norman Banzon';
             const employeeID = '010';
             const employeePosition = 'Senior Software Developer';

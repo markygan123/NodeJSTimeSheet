@@ -96,7 +96,6 @@ const APP = (function() {
 
     const submitPunch = () => {
         let timeNow = digitalClockEl.innerHTML;
-        let tempAMHrs;        
 
         if (timeInAMCell.innerHTML  === "") {
             timeInAMCell.innerHTML = timeNow;
