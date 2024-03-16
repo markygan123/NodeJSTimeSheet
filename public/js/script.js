@@ -109,12 +109,11 @@ const APP = (function() {
             timeOutAMCell.classList.add("punched-in");
             totalHrsAM = Number(timeOutAMCell.innerHTML.substring(0,2) + "." + timeOutAMCell.innerHTML.substring(3)) - 
                          Number(timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3));
-            totalHrs = totalHrsAM;
-            tempAMHrs = totalHrsAM.toFixed(2);
-            totalHrsCell.innerHTML = tempAMHrs;
+            totalHrs = totalHrsAM.toFixed(1);
+            totalHrsCell.innerHTML = totalHrs;
             clockPunchCount++;
             localStorage.setItem("TimeOutAM", timeNow);
-            localStorage.setItem("TotalHrs", tempAMHrs);
+            localStorage.setItem("TotalHrs", totalHrs);
             storeTimePunch();            
         } else if (clockPunchBtn.innerHTML === "Clock In" && !timeInPMCell.classList.contains("punched-in") && timeInPMCell.innerHTML === "") {
             timeInPMCell.innerHTML = timeNow;
@@ -130,11 +129,11 @@ const APP = (function() {
                          Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));
             localStorage.setItem("TimeOutPM", timeNow);
             clockPunchCount++;
-            totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(2);
+            totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(1);
             totalHrsCell.innerHTML = totalHrs;
             localStorage.setItem("TotalHrs", totalHrs); 
-            localStorage.setItem("WorkDayStatus", "done");      
-            storeTimePunch();   
+            localStorage.setItem("WorkDayStatus", "done");  
+            storeTimePunch();
         }
         
         let workDayStatus = localStorage.getItem("WorkDayStatus", "done");
