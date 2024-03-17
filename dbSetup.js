@@ -3,11 +3,18 @@ let sql;
 
 const initializeDb = () => {
     const db = new sqlite3.Database('./database/timesheet.db', sqlite3.OPEN_READWRITE, (error) => {
-        if (error) return console.error(error.message);
+        if (error) console.error(error.message);
         
-        sql = `CREATE TABLE timesheet(table_id INTEGER PRIMARY KEY, row_id,date,time_in_am,time_out_am,time_in_pm,time_out_pm,work_day_status,
+        sql = `CREATE TABLE IF NOT EXISTS timesheet(table_id,row_id INTEGER PRIMARY KEY,date,time_in_am,time_out_am,time_in_pm,time_out_pm,
             total_hrs_daily,total_hrs_weekly)`;
-        db.run(sql);
+        db.run(sql, (err) => {
+            err ? console.error('Error creating timesheet table: ', err.message) : console.log('Timesheet table created successfully.');
+        });
+        // db.run(`DELETE FROM timesheet`);
+    });
+
+    db.close(error => {
+        error ? console.error('Error closing database: ', err.message) : console.log('Disconnected from the SQLite database.');
     });
 }
 

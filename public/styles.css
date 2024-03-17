@@ -126,6 +126,13 @@ tbody tr:nth-child(even) {
     height: 25px;
 }
 
+.weekly-totals {
+    display: flex;
+    justify-content: space-evenly;
+    width: 65%;
+    margin: 25px auto;
+}
+
 /* clock punch modal styles */
 .modal-window {
     max-width: 300px;

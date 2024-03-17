@@ -12,13 +12,16 @@ const APP = (function() {
     let clockPunchCount = 0;
     let timeInAM = 0;
     let timeInPM = 0;
+    let weeklyTotals = 0;
     let timePunchJson = {};
+    let timePunchDayJson = {};
 
     let timeInAMCell = document.querySelector("td.time-in-am");
     let timeOutAMCell = document.querySelector("td.time-out-am");        
     let timeInPMCell = document.querySelector("td.time-in-pm");
     let timeOutPMCell = document.querySelector("td.time-out-pm");
     let totalHrsCell = document.querySelector("td.total-hrs");
+    let totalHrsWeekCell = document.querySelector(".total-hrs-week");
 
     function init() {
         addListeners();
@@ -101,7 +104,6 @@ const APP = (function() {
             timeInAMCell.innerHTML = timeNow;
             timeInAMCell.classList.add("punched-in");
             localStorage.setItem("TimeInAM", timeNow);            
-            clockPunchCount++;
             storeTimePunch();
         } else if (clockPunchBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
             timeOutAMCell.innerHTML = timeNow;
@@ -110,14 +112,12 @@ const APP = (function() {
                          Number(timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3));
             totalHrs = totalHrsAM.toFixed(1);
             totalHrsCell.innerHTML = totalHrs;
-            clockPunchCount++;
             localStorage.setItem("TimeOutAM", timeNow);
             localStorage.setItem("TotalHrs", totalHrs);
             storeTimePunch();            
         } else if (clockPunchBtn.innerHTML === "Clock In" && !timeInPMCell.classList.contains("punched-in") && timeInPMCell.innerHTML === "") {
             timeInPMCell.innerHTML = timeNow;
             timeInPMCell.classList.add("punched-in");
-            clockPunchCount++;
             localStorage.setItem("TimeInPM", timeNow);
             storeTimePunch();            
         } else if (clockPunchBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
@@ -127,11 +127,15 @@ const APP = (function() {
             totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
                          Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));
             localStorage.setItem("TimeOutPM", timeNow);
-            clockPunchCount++;
             totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(1);
             totalHrsCell.innerHTML = totalHrs;
+            weeklyTotals += parseInt(totalHrs);
+            totalHrsWeekCell.innerHTML = weeklyTotals;
             localStorage.setItem("TotalHrs", totalHrs); 
-            localStorage.setItem("WorkDayStatus", "done");  
+            localStorage.setItem("WorkDayStatus", "done");
+            
+            localStorage.setItem("TotalWeeklyHrs", weeklyTotals);
+
             storeTimePunch();
         }
         
@@ -153,25 +157,48 @@ const APP = (function() {
         let timeInPm = localStorage.getItem("TimeInPM");
         let timeOutPm = localStorage.getItem("TimeOutPM");
         let totalHrs = localStorage.getItem("TotalHrs");
+        let totalWeeklyHrs = localStorage.getItem("TotalWeeklyHrs");
         let workDayStatus = localStorage.getItem("WorkDayStatus");
         
-        timePunchJson["TimeInAM"] = timeInAm;
-        timePunchJson["TimeOutAM"] = timeOutAm;
-        timePunchJson["TimeInPM"] = timeInPm;
-        timePunchJson["TimeOutPM"] = timeOutPm;
-        timePunchJson["TotalHrs"] = totalHrs;
-        timePunchJson["WorkDayStatus"] = workDayStatus;
-        
-        console.log(timePunchJson);
-        fetch("/", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(timePunchJson)
-        })
-         .then(response => response.json())
-         .catch(error => console.error('Error: ', error))
+        if (workDayStatus === "done") {
+            timePunchDayJson["TimeInAM"] = timeInAm;
+            timePunchDayJson["TimeOutAM"] = timeOutAm;
+            timePunchDayJson["TimeInPM"] = timeInPm;
+            timePunchDayJson["TimeOutPM"] = timeOutPm;
+            timePunchDayJson["TotalHrs"] = totalHrs;
+            timePunchDayJson["TotalWeeklyHrs"] = totalWeeklyHrs;
+
+            console.log(timePunchDayJson);
+
+            fetch("/submitHours", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(timePunchDayJson)
+            })
+             .then(response => response.json())
+             .catch(error => console.error('Error: ', error));
+        } else {
+            timePunchJson["TimeInAM"] = timeInAm;
+            timePunchJson["TimeOutAM"] = timeOutAm;
+            timePunchJson["TimeInPM"] = timeInPm;
+            timePunchJson["TimeOutPM"] = timeOutPm;
+            timePunchJson["TotalHrs"] = totalHrs;
+            timePunchJson["WorkDayStatus"] = workDayStatus;
+
+            console.log(timePunchJson);
+
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(timePunchJson)
+            })
+             .then(response => response.json())
+             .catch(error => console.error('Error: ', error));
+        }
     }
     
 })();

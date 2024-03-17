@@ -3,6 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { initializeDb } = require('./dbSetup');
+const sqlite3 = require('sqlite3').verbose();
 
 const PORT = 3000;
 
@@ -11,6 +12,7 @@ let storedTimeOutAM = "";
 let storedTimeInPM = "";
 let storedTimeOutPM = "";
 let storedtotalHrs = "";
+let storedtotalWeeklyHrs = "";
 
 const server = http.createServer((req, res) => {
     // Handle only GET requests for the specified route '/'
@@ -29,16 +31,12 @@ const server = http.createServer((req, res) => {
 
             //Dynamic data
             const pageTitle = 'Weekly Time Sheet';
-            let date = new Date();
-            let weeklyTotal = 8;
-            let day = date.getDate();
-            let month = date.getMonth() + 1;
-            let year = date.getFullYear();
-            let dateToday = `${month}/${day}/${year}`;
+            let weeklyTotal = 0;            
             const employeeName = 'Norman Banzon';
             const employeeID = '010';
             const employeePosition = 'Senior Software Developer';
-            const employeeDept = 'IT/Software Development';            
+            const employeeDept = 'IT/Software Development'; 
+            const dateToday = getDateToday();           
             
 
             // Replace the placeholder with actual data
@@ -96,7 +94,13 @@ const server = http.createServer((req, res) => {
                                 </tbody>
                                 </table>
                         </div>
+                        
+                        <div class="weekly-totals">
+                            <p>Weekly Totals:</p>
+                            <p class="total-hrs-week">${storedtotalWeeklyHrs ? storedtotalWeeklyHrs : '0'}</p>
+                        </div>
                     </div>
+
                     
                     <div class="overlay hidden">
                         <section class="modal-window">
@@ -214,7 +218,65 @@ const server = http.createServer((req, res) => {
                 console.error('Error parsing JSON', error);
             }
 
-            console.log(storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedDayStatus);
+            console.log('Time Punch: ', storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedDayStatus);
+        });
+    } else if (req.method === 'POST', req.url === '/submitHours') { 
+        let body = '';
+        getDateToday();
+        
+
+        req.on('data', function (data) {
+            body += data.toString();
+        });
+
+        req.on('end', () => {  
+            try {
+                const postData = JSON.parse(body);   
+                const workDate = getDateToday();           
+                             
+                storedTimeInAM = postData.TimeInAM;
+                storedTimeOutAM = postData.TimeOutAM;
+                storedTimeInPM = postData.TimeInPM;
+                storedTimeOutPM = postData.TimeOutPM;
+                storedtotalHrs = postData.TotalHrs;
+                storedtotalWeeklyHrs = postData.TotalWeeklyHrs;
+
+                const db = new sqlite3.Database('database/timesheet.db');
+
+                db.run(`INSERT INTO timesheet (date,time_in_am,time_out_am,time_in_pm,time_out_pm,total_hrs_daily,total_hrs_weekly)
+                        VALUES (?,?,?,?,?,?,?)`, [workDate,storedTimeInAM,storedTimeOutAM,storedTimeInPM,storedTimeOutPM,storedtotalHrs,storedtotalWeeklyHrs], function (err) {
+                            if (err) {
+                                console.error('Error inserting data into timesheet table: ', err.message);
+                                res.writeHead(500, {
+                                    'Content-Type': 'application/json'
+                                });
+                                res.end(JSON.stringify({
+                                    error: 'Internal server error'
+                                }));
+                            } else {
+                                console.log(`Data inserted into timesheet table with ID ${this.lastID}`);
+                                res.writeHead(200, {
+                                    'Content-Type': 'application/json'
+                                });
+                                res.end(JSON.stringify({
+                                    message: 'Data inserted successfully.'
+                                }));
+                            }
+                        });
+
+                db.close();
+            }
+            catch (error) {
+                console.error('Error parsing JSON', error);
+                res.writeHead(400, {
+                    'Content-Type': 'application/json'
+                });
+                res.end(JSON.stringify({
+                    error: 'Invalid JSON format'
+                }));
+            }
+
+            console.log('Daily Punch: ', storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedtotalWeeklyHrs);
         });
 
 
@@ -225,6 +287,16 @@ const server = http.createServer((req, res) => {
 });
 
 initializeDb();
+
+const getDateToday = () => {
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let dateToday = `${month}/${day}/${year}`;
+
+    return dateToday;
+}
 
 // Start the server on port 3000 (or choose a different port if needed)
 server.listen(PORT, () => {
