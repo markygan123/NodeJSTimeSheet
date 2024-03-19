@@ -286,16 +286,21 @@ const server = http.createServer((req, res) => {
         db.run(`DELETE FROM timesheet`, function (error) {
             if (error) {
                 console.error('Error clearing timesheet', error.message);
-                res.status(500).send('Internal Server Error');
+                res.writeHead(500, {
+                    'Content-Type': 'text/plain'
+                });
+                res.end('Internal Server Error');
             } else {
-                console.log('Table cleared successfully');
-                res.status(200).send('Table cleared successfully.');
+                console.log('Table cleared successfully.');
+                res.writeHead(200, {
+                    'Content-Type' : 'text/plain'
+                });
+                res.end('Table cleared successfully.');
             }
         });
 
         db.close();
 
-        console.log("cleared timesheet");        
     } else {
         res.writeHead(404, { 'Content-Type' : 'text/plain' });
         res.end('Not Found');
