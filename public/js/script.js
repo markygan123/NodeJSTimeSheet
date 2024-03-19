@@ -62,6 +62,7 @@ const APP = (function() {
         
         const cancelPunchBtn = document.querySelector(".cancel-punch");
         const submitPunchBtn = document.querySelector(".submit-punch");
+        const clearTimesheetBtn = document.querySelector("#clear-timesheet");
 
         clockPunchBtn.addEventListener("click", function openModal() {
             modal.classList.remove("hidden");
@@ -69,6 +70,7 @@ const APP = (function() {
         });
         cancelPunchBtn.addEventListener("click", closeModal);
         submitPunchBtn.addEventListener("click", submitPunch);
+        clearTimesheetBtn.addEventListener("click", clearTimesheet);
 
     }
     
@@ -199,6 +201,22 @@ const APP = (function() {
              .then(response => response.json())
              .catch(error => console.error('Error: ', error));
         }
+    }
+
+    const clearTimesheet = () => {
+        fetch("/clearTimeSheet", {
+            method: "POST"
+        })
+         .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                console.error("Failed to clear timesheet: ", response.statusText);
+            }
+         })
+          .catch(error => {
+            console.error("Error clearing timesheet");
+          })
     }
     
 })();

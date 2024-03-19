@@ -7,12 +7,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const PORT = 3000;
 
-let storedTimeInAM = "";
-let storedTimeOutAM = "";
-let storedTimeInPM = "";
-let storedTimeOutPM = "";
-let storedtotalHrs = "";
-let storedtotalWeeklyHrs = "";
+
 
 const server = http.createServer((req, res) => {
     // Handle only GET requests for the specified route '/'
@@ -36,8 +31,14 @@ const server = http.createServer((req, res) => {
             const employeeID = '010';
             const employeePosition = 'Senior Software Developer';
             const employeeDept = 'IT/Software Development'; 
-            const dateToday = getDateToday();           
+            const dateToday = getDateToday();    
             
+            let storedTimeInAM = "";
+            let storedTimeOutAM = "";
+            let storedTimeInPM = "";
+            let storedTimeOutPM = "";
+            let storedtotalHrs = "";
+            let storedtotalWeeklyHrs = "";            
 
             // Replace the placeholder with actual data
             const htmlContent = `
@@ -69,6 +70,7 @@ const server = http.createServer((req, res) => {
                             <div class="dates-section">
                                 <input type="week" name="week" id="week">
                                 <button class="clock-punch-btn">Clock In</button>
+                                <button id="clear-timesheet">Clear Table</button>
                             </div>
 
                             <table class="time-sheet">
@@ -278,8 +280,22 @@ const server = http.createServer((req, res) => {
 
             console.log('Daily Punch: ', storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedtotalWeeklyHrs);
         });
+    } else if (req.method === 'POST' && req.url === '/clearTimeSheet') {
+        const db = new sqlite3.Database('database/timesheet.db');
 
+        db.run(`DELETE FROM timesheet`, function (error) {
+            if (error) {
+                console.error('Error clearing timesheet', error.message);
+                res.status(500).send('Internal Server Error');
+            } else {
+                console.log('Table cleared successfully');
+                res.status(200).send('Table cleared successfully.');
+            }
+        });
 
+        db.close();
+
+        console.log("cleared timesheet");        
     } else {
         res.writeHead(404, { 'Content-Type' : 'text/plain' });
         res.end('Not Found');
