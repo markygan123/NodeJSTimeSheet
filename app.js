@@ -69,8 +69,8 @@ const server = http.createServer((req, res) => {
                             </div>
                             <div class="dates-section">
                                 <input type="week" name="week" id="week">
-                                <button class="clock-punch-btn">Clock In</button>
                                 <button id="clear-timesheet">Clear Table</button>
+                                <button class="clock-punch-btn">Clock In</button>
                             </div>
 
                             <table class="time-sheet">
@@ -85,7 +85,7 @@ const server = http.createServer((req, res) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr id='week-1'>
+                                    <tr id='week-1'>
                                         <td data-label="Date Today">${dateToday}</td>
                                         <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
                                         <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>

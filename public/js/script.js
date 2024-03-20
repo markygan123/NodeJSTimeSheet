@@ -131,7 +131,7 @@ const APP = (function() {
             localStorage.setItem("TimeOutPM", timeNow);
             totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(1);
             totalHrsCell.innerHTML = totalHrs;
-            weeklyTotals += parseInt(totalHrs);
+            weeklyTotals += totalHrs;
             totalHrsWeekCell.innerHTML = weeklyTotals;
             localStorage.setItem("TotalHrs", totalHrs); 
             localStorage.setItem("WorkDayStatus", "done");
