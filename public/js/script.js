@@ -25,11 +25,12 @@ const APP = (function() {
 
     function init() {
         addListeners();
-        buttonLabel();
+        getDates();
+        // buttonLabel();
 
         setInterval(function () {
             digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
-        }, 1000);
+        }, 1000);        
     }
     
     const addListeners = () => {
@@ -63,6 +64,7 @@ const APP = (function() {
         const cancelPunchBtn = document.querySelector(".cancel-punch");
         const submitPunchBtn = document.querySelector(".submit-punch");
         const clearTimesheetBtn = document.querySelector("#clear-timesheet");
+        const clrLocalStorageBtn = document.querySelector("#clear-local-storage");
 
         clockPunchBtn.addEventListener("click", function openModal() {
             modal.classList.remove("hidden");
@@ -71,75 +73,78 @@ const APP = (function() {
         cancelPunchBtn.addEventListener("click", closeModal);
         submitPunchBtn.addEventListener("click", submitPunch);
         clearTimesheetBtn.addEventListener("click", clearTimesheet);
+        clrLocalStorageBtn.addEventListener("click", function () {
+            localStorage.clear();
+        });
 
     }
     
-    const buttonLabel = () => {
-        let timeInAM = document.querySelector("td.time-in-am").innerHTML;
-        let timeOutAM = document.querySelector("td.time-out-am").innerHTML;
-        let timeInPM = document.querySelector("td.time-in-pm").innerHTML;
-        
-        if (timeInAM === "") {
-            clockPunchBtn.innerHTML = "Clock In";
-            clockPunchModalBtn.innerHTML = "Clock In";
-        } else if (timeOutAM === "") {
-            clockPunchBtn.innerHTML = "Clock Out";
-            clockPunchModalBtn.innerHTML = "Clock Out";
-        } else if (timeInPM === "") {
-            clockPunchBtn.innerHTML = "Clock In";
-            clockPunchModalBtn.innerHTML = "Clock In";
-        } else {
-            clockPunchBtn.innerHTML = "Clock Out";
-            clockPunchModalBtn.innerHTML = "Clock Out";
-        }
-    }
-
     const closeModal = () =>  {
         modal.classList.add("hidden");
         overlay.classList.add("hidden");
     }
 
+    const getDates = () => {
+        let weekDate = [];
+        const todayCell = document.querySelectorAll('td[data-label="Date Today"]');
+        
+        for (let i = 0; i < todayCell.length; i++) {
+            weekDate.push(todayCell[i]); 
+        }
+        
+        return weekDate;
+    }
+    
     const submitPunch = () => {
         let timeNow = digitalClockEl.innerHTML;
+        let day = new Date().getDay();
+        let currentTimeInAmCell = getDates()[day-1].nextElementSibling;
+        let currentTimeOutAmCell = getDates()[day-1].nextElementSibling.nextElementSibling;
+        let currentTimeInPmCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling;
+        let currentTimeOutPmCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
+        let currentTotalHrsCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
 
-        if (timeInAMCell.innerHTML  === "") {
-            timeInAMCell.innerHTML = timeNow;
-            timeInAMCell.classList.add("punched-in");
-            localStorage.setItem("TimeInAM", timeNow);            
+        if (currentTimeInAmCell.innerHTML === "") {
+            currentTimeInAmCell.innerHTML = timeNow;
+            currentTimeInAmCell.classList.add("punched-in");
+            localStorage.setItem("TimeInAM", timeNow);
+            btnLabelClockOut();       
             storeTimePunch();
-        } else if (clockPunchBtn.innerHTML === "Clock Out" && !timeOutAMCell.classList.contains("punched-in") && timeOutAMCell.innerHTML === "") {
-            timeOutAMCell.innerHTML = timeNow;
-            timeOutAMCell.classList.add("punched-in");
-            totalHrsAM = Number(timeOutAMCell.innerHTML.substring(0,2) + "." + timeOutAMCell.innerHTML.substring(3)) - 
-                         Number(timeInAMCell.innerHTML.substring(0,2) + "." + timeInAMCell.innerHTML.substring(3));
+        } else if (currentTimeOutAmCell.innerHTML  === "" && !currentTimeOutAmCell.classList.contains("punched-in")) {
+            currentTimeOutAmCell.innerHTML = timeNow;
+            currentTimeOutAmCell.classList.add("punched-in");
+            totalHrsAM = Number(currentTimeOutAmCell.innerHTML.substring(0,2) + "." + currentTimeOutAmCell.innerHTML.substring(3)) - 
+            Number(currentTimeInAmCell.innerHTML.substring(0,2) + "." + currentTimeInAmCell.innerHTML.substring(3));
             totalHrs = totalHrsAM.toFixed(1);
-            totalHrsCell.innerHTML = totalHrs;
+            currentTotalHrsCell.innerHTML = totalHrs;
             localStorage.setItem("TimeOutAM", timeNow);
             localStorage.setItem("TotalHrs", totalHrs);
+            btnLabelClockIn();
             storeTimePunch();            
-        } else if (clockPunchBtn.innerHTML === "Clock In" && !timeInPMCell.classList.contains("punched-in") && timeInPMCell.innerHTML === "") {
-            timeInPMCell.innerHTML = timeNow;
-            timeInPMCell.classList.add("punched-in");
+        } else if (!currentTimeInPmCell.classList.contains("punched-in") && currentTimeInPmCell.innerHTML === "") {
+            currentTimeInPmCell.innerHTML = timeNow;
+            currentTimeInPmCell.classList.add("punched-in");
             localStorage.setItem("TimeInPM", timeNow);
+            btnLabelClockOut();
             storeTimePunch();            
-        } else if (clockPunchBtn.innerHTML === "Clock Out" && timeOutPMCell.innerHTML === "" && !timeOutPMCell.classList.contains("punched-in")) {
+        } else if (currentTimeOutPmCell.innerHTML === "" && !currentTimeOutPmCell.classList.contains("punched-in")) {
             let timeAm = localStorage.getItem("TotalHrs");
-            timeOutPMCell.innerHTML = timeNow;
-            timeOutPMCell.classList.add("punched-in");
-            totalHrsPM = Number(timeOutPMCell.innerHTML.substring(0,2) + "." + timeOutPMCell.innerHTML.substring(3)) -
-                         Number(timeInPMCell.innerHTML.substring(0,2) + "." + timeInPMCell.innerHTML.substring(3));
+            currentTimeOutPmCell.innerHTML = timeNow;
+            currentTimeOutPmCell.classList.add("punched-in");
+            totalHrsPM = Number(currentTimeOutPmCell.innerHTML.substring(0,2) + "." + currentTimeOutPmCell.innerHTML.substring(3)) -
+                         Number(currentTimeInPmCell.innerHTML.substring(0,2) + "." + currentTimeInPmCell.innerHTML.substring(3));
             localStorage.setItem("TimeOutPM", timeNow);
-            totalHrs = (parseInt(timeAm) + totalHrsPM).toFixed(1);
-            totalHrsCell.innerHTML = totalHrs;
+            totalHrs = Math.round((parseInt(timeAm) + totalHrsPM) * 10) / 10;
             weeklyTotals += totalHrs;
+            currentTotalHrsCell.innerHTML = totalHrs;
             totalHrsWeekCell.innerHTML = weeklyTotals;
             localStorage.setItem("TotalHrs", totalHrs); 
             localStorage.setItem("WorkDayStatus", "done");
-            
-            localStorage.setItem("TotalWeeklyHrs", weeklyTotals);
+        }    
 
-            storeTimePunch();
-        }
+        localStorage.setItem("TotalWeeklyHrs", weeklyTotals);
+
+        storeTimePunch();
         
         let workDayStatus = localStorage.getItem("WorkDayStatus", "done");
 
@@ -149,8 +154,16 @@ const APP = (function() {
         }
 
         closeModal();
-        //update button label every clock punch
-        buttonLabel();
+    }
+
+    const btnLabelClockOut = () => {
+        clockPunchBtn.innerHTML = "Clock Out";            
+        clockPunchModalBtn.innerHTML = "Clock Out"; 
+    }
+
+    const btnLabelClockIn = () => {
+        clockPunchBtn.innerHTML = "Clock In";            
+        clockPunchModalBtn.innerHTML = "Clock In";     
     }
 
     const storeTimePunch = () => {

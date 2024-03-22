@@ -70,6 +70,7 @@ const server = http.createServer((req, res) => {
                             <div class="dates-section">
                                 <input type="week" name="week" id="week">
                                 <button id="clear-timesheet">Clear Table</button>
+                                <button id="clear-local-storage">Clear Local Storage</button>
                                 <button class="clock-punch-btn">Clock In</button>
                             </div>
 
@@ -85,8 +86,40 @@ const server = http.createServer((req, res) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id='week-1'>
-                                        <td data-label="Date Today">${dateToday}</td>
+                                    <tr class='timelog-monday'>
+                                        <td data-label="Date Today">${dateToday.Monday}</td>
+                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
+                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
+                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
+                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
+                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
+                                    </tr>
+                                    <tr class='timelog-tuesday'>
+                                        <td data-label="Date Today">${dateToday.Tuesday}</td>
+                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
+                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
+                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
+                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
+                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
+                                    </tr>
+                                    <tr class='timelog-wednesday'>
+                                        <td data-label="Date Today">${dateToday.Wednesday}</td>
+                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
+                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
+                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
+                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
+                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
+                                    </tr>
+                                    <tr class='timelog-thursday'>
+                                        <td data-label="Date Today">${dateToday.Thursday}</td>
+                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
+                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
+                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
+                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
+                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
+                                    </tr>
+                                    <tr class='timelog-friday'>
+                                        <td data-label="Date Today">${dateToday.Friday}</td>
                                         <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
                                         <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
                                         <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
@@ -109,7 +142,7 @@ const server = http.createServer((req, res) => {
 
                             <h3>Confirm Clock Punch</h3>
                             <div id="clock"></div>
-                            <button class="clock-punch-modal-btn submit-punch"></button>
+                            <button class="clock-punch-modal-btn submit-punch">Clock In</button>
                             <button class="cancel-punch">Cancel</button>
                         </section>
                     </div>
@@ -311,12 +344,24 @@ initializeDb();
 
 const getDateToday = () => {
     let date = new Date();
-    let day = date.getDate();
+    let day = date.getDay();
+    let monday = date.getDate() - day + 1;
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
-    let dateToday = `${month}/${day}/${year}`;
 
-    return dateToday;
+    let Monday = `${month}/${monday}/${year}`;
+    let Tuesday = `${month}/${monday + 1}/${year}`;
+    let Wednesday = `${month}/${monday + 2}/${year}`;
+    let Thursday = `${month}/${monday + 3}/${year}`;
+    let Friday = `${month}/${monday + 4}/${year}`;
+
+    return dateToday = {
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday
+    };
 }
 
 // Start the server on port 3000 (or choose a different port if needed)
