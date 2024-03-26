@@ -314,6 +314,21 @@ const server = http.createServer((req, res) => {
                                 }));
                             }
                         });
+                
+                db.run(`
+                        CREATE TRIGGER IF NOT EXISTS increment_table_id
+                        AFTER INSERT ON timesheet
+                        BEGIN
+                            UPDATE timesheet
+                            SET table_id = (SELECT COUNT(*) / 4 FROM timesheet) + 1;
+                        END
+                `, function (error) {
+                    if (error) {
+                        console.error('Error inserting table_id:', error.message);
+                    } else {
+                        console.log('table_id inserted');
+                    }
+                });
 
                 db.close();
             }
