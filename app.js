@@ -256,7 +256,26 @@ const server = http.createServer((req, res) => {
             console.log('Time Punch: ', storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedDayStatus);
         });
     } else if (req.method === 'POST', req.url === '/submitHours') { 
-        let body = '';        
+        let body = '';     
+        const today =  new Date().getDay();
+
+        switch (today) {
+            case 1:
+                workDate = getDateToday().Monday;
+                break;
+            case 2:
+                workDate = getDateToday().Tuesday;
+                break;
+            case 3:
+                workDate = getDateToday().Wednesday;
+                break;
+            case 4:
+                workDate = getDateToday().Thursday;
+                break;
+            default:
+                workDate = getDateToday().Friday;
+                break;
+        }
 
         req.on('data', function (data) {
             body += data.toString();
@@ -265,7 +284,6 @@ const server = http.createServer((req, res) => {
         req.on('end', () => {  
             try {
                 const postData = JSON.parse(body);   
-                const workDate = getDateToday();           
                              
                 storedTimeInAM = postData.TimeInAM;
                 storedTimeOutAM = postData.TimeOutAM;
