@@ -256,9 +256,7 @@ const server = http.createServer((req, res) => {
             console.log('Time Punch: ', storedTimeInAM, storedTimeOutAM, storedTimeInPM, storedTimeOutPM, storedtotalHrs, storedDayStatus);
         });
     } else if (req.method === 'POST', req.url === '/submitHours') { 
-        let body = '';
-        getDateToday();
-        
+        let body = '';        
 
         req.on('data', function (data) {
             body += data.toString();

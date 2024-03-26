@@ -140,16 +140,14 @@ const APP = (function() {
             totalHrsWeekCell.innerHTML = weeklyTotals;
             localStorage.setItem("TotalHrs", totalHrs); 
             localStorage.setItem("WorkDayStatus", "done");
-        }    
-
-        localStorage.setItem("TotalWeeklyHrs", weeklyTotals);
-
-        storeTimePunch();
+            localStorage.setItem("TotalWeeklyHrs", weeklyTotals);
+        }
         
         let workDayStatus = localStorage.getItem("WorkDayStatus", "done");
-
+        
         if (workDayStatus != null) {
             clockPunchBtn.style.display = "none";    
+            storeTimePunch();
             localStorage.clear();
         }
 
@@ -201,8 +199,6 @@ const APP = (function() {
             timePunchJson["TimeOutPM"] = timeOutPm;
             timePunchJson["TotalHrs"] = totalHrs;
             timePunchJson["WorkDayStatus"] = workDayStatus;
-
-            console.log(timePunchJson);
 
             fetch("/", {
                 method: "POST",
