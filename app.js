@@ -67,8 +67,7 @@ const server = http.createServer((req, res) => {
                                     <p class="detail"> Department: ${employeeDept} </p>
                                 </div>
                             </div>
-                            <div class="dates-section">
-                                <input type="week" name="week" id="week">
+                            <div class="action-buttons">
                                 <button id="clear-timesheet">Clear Table</button>
                                 <button id="clear-local-storage">Clear Local Storage</button>
                                 <button class="clock-punch-btn">Clock In</button>

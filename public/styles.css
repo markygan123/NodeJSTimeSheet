@@ -45,7 +45,7 @@ body {
 }
 
 .employee-info,
-.dates-section {
+.action-buttons {
     display: flex;
     justify-content: space-between;
     width: 65%;
