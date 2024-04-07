@@ -141,6 +141,7 @@ const server = http.createServer((req, res) => {
 
                             <h3>Confirm Clock Punch</h3>
                             <div id="clock"></div>
+                            <p id="invalid-day-warning">Invalid login. Office is closed today.</p>
                             <button class="clock-punch-modal-btn submit-punch">Clock In</button>
                             <button class="cancel-punch">Cancel</button>
                         </section>

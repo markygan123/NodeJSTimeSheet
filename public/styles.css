@@ -171,6 +171,11 @@ tbody tr:nth-child(even) {
     margin: 20px 0;
 }
 
+#invalid-day-warning {
+    margin-bottom: 20px;
+    display: none;
+}
+
 
 
 

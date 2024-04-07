@@ -29,7 +29,7 @@ const APP = (function() {
         // buttonLabel();
 
         setInterval(function () {
-            digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
+            digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
         }, 1000);        
     }
     
@@ -96,6 +96,7 @@ const APP = (function() {
     }
     
     const submitPunch = () => {
+        checkDay();
         let timeNow = digitalClockEl.innerHTML;
         let day = new Date().getDay();
         let currentTimeInAmCell = getDates()[day-1].nextElementSibling;
@@ -103,6 +104,7 @@ const APP = (function() {
         let currentTimeInPmCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling;
         let currentTimeOutPmCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
         let currentTotalHrsCell = getDates()[day-1].nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling;
+
 
         if (currentTimeInAmCell.innerHTML === "") {
             currentTimeInAmCell.innerHTML = timeNow;
@@ -226,6 +228,15 @@ const APP = (function() {
           .catch(error => {
             console.error("Error clearing timesheet");
           })
+    }
+
+    const checkDay = () => {
+        const currentDay = new Date().getDay();
+        const warning = document.querySelector("#invalid-day-warning");
+
+        if (currentDay === 0 || currentDay === 6) {
+            warning.style.display = "block";    
+        }
     }
     
 })();
