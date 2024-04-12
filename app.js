@@ -38,128 +38,104 @@ const server = http.createServer((req, res) => {
             let storedTimeInPM = "";
             let storedTimeOutPM = "";
             let storedtotalHrs = "";
-            let storedtotalWeeklyHrs = "";            
+            let storedtotalWeeklyHrs = "";
+            let savedRow = "";
+            
+            const db = new sqlite3.Database('database/timesheet.db');
+            const sql = `SELECT * FROM timesheet`;
 
-            // Replace the placeholder with actual data
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <link rel="stylesheet" type="text/css" href="/public/styles.css" />
-                    <title>SafeTrust</title>
-                </head>
-                <body>
-                    <div id="container">
-                        <div class="nav-logo">
-                            <img src="/src/images/logo.png" alt="Page Logo"> 
-                        </div>
-                        <div class="page-name">${pageTitle}</div>
-                        <div class="page-body">
-                            <div class="employee-info">
-                                <div class="empinfo-left>
-                                    <p class="detail"> Employee Name: ${employeeName} </p>
-                                    <p class="detail"> Employee ID: ${employeeID} </p>
-                                </div>
-                                <div class="empinfo-right">
-                                    <p class="detail"> Position: ${employeePosition} </p>
-                                    <p class="detail"> Department: ${employeeDept} </p>
-                                </div>
-                            </div>
-                            <div class="action-buttons">
-                                <button id="clear-timesheet">Clear Table</button>
-                                <button id="clear-local-storage">Clear Local Storage</button>
-                                <button class="clock-punch-btn">Clock In</button>
-                            </div>
+            db.all(sql, [], (err, rows) => {
+                if (err) {
+                    throw err;
+                }
+                rows.forEach(row => {
+                    savedRow += `<tr class='timelog'>
+                            <td data-label="Date Today">${row.date}</td>
+                            <td class="time-in-am">${row.time_in_am}</td>
+                            <td class="time-out-am">${row.time_out_am}</td>
+                            <td class="time-in-pm">${row.time_in_pm}</td>
+                            <td class="time-out-pm">${row.time_out_pm}</td>
+                            <td class="total-hrs">${row.total_hrs_daily}</td>
+                        </tr>
+                    `;
+                });
+                
+                console.log(savedRow);
 
-                            <table class="time-sheet">
-                                <thead>
-                                    <tr>
-                                        <th id="date-cell">Date</th>
-                                        <th>Time In (AM)</th>
-                                        <th>Time Out (AM)</th>
-                                        <th>Time In (PM)</th>
-                                        <th>Time Out (PM)</th>
-                                        <th>Total Hours</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class='timelog-monday'>
-                                        <td data-label="Date Today">${dateToday.Monday}</td>
-                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
-                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
-                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
-                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
-                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
-                                    </tr>
-                                    <tr class='timelog-tuesday'>
-                                        <td data-label="Date Today">${dateToday.Tuesday}</td>
-                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
-                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
-                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
-                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
-                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
-                                    </tr>
-                                    <tr class='timelog-wednesday'>
-                                        <td data-label="Date Today">${dateToday.Wednesday}</td>
-                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
-                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
-                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
-                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
-                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
-                                    </tr>
-                                    <tr class='timelog-thursday'>
-                                        <td data-label="Date Today">${dateToday.Thursday}</td>
-                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
-                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
-                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
-                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
-                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
-                                    </tr>
-                                    <tr class='timelog-friday'>
-                                        <td data-label="Date Today">${dateToday.Friday}</td>
-                                        <td class="time-in-am">${storedTimeInAM ? storedTimeInAM : ''}</td>
-                                        <td class="time-out-am">${storedTimeOutAM ? storedTimeOutAM : ''}</td>
-                                        <td class="time-in-pm">${storedTimeInPM ? storedTimeInPM : ''}</td>
-                                        <td class="time-out-pm">${storedTimeOutPM ? storedTimeOutPM : ''}</td>
-                                        <td class="total-hrs">${storedtotalHrs ? storedtotalHrs : '0'}</td>
-                                    </tr>
-                                </tbody>
-                                </table>
+                // Replace the placeholder with actual data
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link rel="stylesheet" type="text/css" href="/public/styles.css" />
+                        <title>SafeTrust</title>
+                    </head>
+                    <body>
+                        <div id="container">
+                            <div class="nav-logo">
+                                <img src="/src/images/logo.png" alt="Page Logo"> 
+                            </div>
+                            <div class="page-name">${pageTitle}</div>
+                            <div class="page-body">
+                                <div class="employee-info">
+                                    <div class="empinfo-left>
+                                        <p class="detail"> Employee Name: ${employeeName} </p>
+                                        <p class="detail"> Employee ID: ${employeeID} </p>
+                                    </div>
+                                    <div class="empinfo-right">
+                                        <p class="detail"> Position: ${employeePosition} </p>
+                                        <p class="detail"> Department: ${employeeDept} </p>
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button id="clear-timesheet">Clear Table</button>
+                                    <button id="clear-local-storage">Clear Local Storage</button>
+                                    <button class="clock-punch-btn">Clock In</button>
+                                </div>
+                                <table class="time-sheet">
+                                    <thead>
+                                        <tr>
+                                            <th id="date-cell">Date</th>
+                                            <th>Time In (AM)</th>
+                                            <th>Time Out (AM)</th>
+                                            <th>Time In (PM)</th>
+                                            <th>Time Out (PM)</th>
+                                            <th>Total Hours</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${savedRow}
+                                    </tbody>
+                                    </table>
+                            </div>
+                            
+                            <div class="weekly-totals">
+                                <p>Weekly Totals:</p>
+                                <p class="total-hrs-week">${storedtotalWeeklyHrs ? storedtotalWeeklyHrs : '0'}</p>
+                            </div>
                         </div>
                         
-                        <div class="weekly-totals">
-                            <p>Weekly Totals:</p>
-                            <p class="total-hrs-week">${storedtotalWeeklyHrs ? storedtotalWeeklyHrs : '0'}</p>
+                        <div class="overlay hidden">
+                            <section class="modal-window">
+                                <h3>Confirm Clock Punch</h3>
+                                <div id="clock"></div>
+                                <p id="invalid-day-warning">Invalid login. Office is closed today.</p>
+                                <button class="clock-punch-modal-btn submit-punch">Clock In</button>
+                                <button class="cancel-punch">Cancel</button>
+                            </section>
                         </div>
-                    </div>
 
-                    
-                    <div class="overlay hidden">
-                        <section class="modal-window">
+                        <script src="/public/js/script.js"></script>
+                    </body>
+                    </html>
+                `;
 
-                            <h3>Confirm Clock Punch</h3>
-                            <div id="clock"></div>
-                            <p id="invalid-day-warning">Invalid login. Office is closed today.</p>
-                            <button class="clock-punch-modal-btn submit-punch">Clock In</button>
-                            <button class="cancel-punch">Cancel</button>
-                        </section>
-                    </div>
-
-
-
-
-
-
-                    <script src="/public/js/script.js"></script>
-                </body>
-                </html>
-            `;
-
-            // Serve the HTML content with a 200 status code
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(htmlContent);
+                // Serve the HTML content with a 200 status code
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(htmlContent);                
+            });           
         });
     } else if (req.url === '/public/styles.css') {
         fs.readFile('./public/styles.css', 'utf8', (err, data) => {

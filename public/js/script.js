@@ -29,7 +29,7 @@ const APP = (function() {
         // buttonLabel();
 
         setInterval(function () {
-            digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+            digitalClockEl.innerHTML = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }).replace("AM","").replace("PM","");
         }, 1000);        
     }
     
@@ -136,7 +136,7 @@ const APP = (function() {
             totalHrsPM = Number(currentTimeOutPmCell.innerHTML.substring(0,2) + "." + currentTimeOutPmCell.innerHTML.substring(3)) -
                          Number(currentTimeInPmCell.innerHTML.substring(0,2) + "." + currentTimeInPmCell.innerHTML.substring(3));
             localStorage.setItem("TimeOutPM", timeNow);
-            totalHrs = Math.round((parseInt(timeAm) + totalHrsPM) * 10) / 10;
+            totalHrs = Math.round((parseInt(timeAm) + parseInt(totalHrsPM)) * 10) / 10;
             weeklyTotals += totalHrs;
             currentTotalHrsCell.innerHTML = totalHrs;
             totalHrsWeekCell.innerHTML = weeklyTotals;
@@ -150,6 +150,7 @@ const APP = (function() {
         if (workDayStatus != null) {
             clockPunchBtn.style.display = "none";    
             storeTimePunch();
+            console.log(totalHrsCell.parentElement);
             localStorage.clear();
         }
 
