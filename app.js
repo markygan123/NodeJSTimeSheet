@@ -59,8 +59,6 @@ const server = http.createServer((req, res) => {
                         </tr>
                     `;
                 });
-                
-                console.log(savedRow);
 
                 // Replace the placeholder with actual data
                 const htmlContent = `
